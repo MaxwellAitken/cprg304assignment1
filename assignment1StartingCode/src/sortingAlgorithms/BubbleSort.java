@@ -1,41 +1,44 @@
 package sortingAlgorithms;
 
-import shapes.Shape;
+
+import java.util.Comparator;
+
 
 public class BubbleSort 
 {
 
-	
 	@SuppressWarnings("unchecked")
-	public <T> void bubbleSort( Comparable[] array, String compareType ) 
+	public static <T> void bubbleSort2( Comparable<T>[] array, Comparator<? super T> comp )
 	{
 		int length = array.length;
 		
-		if ( compareType.equals( "h" ) ) 
+
+		if (comp == null) 
 		{
 			for (int i = 0; i < length - 1; i++) 
 			{
 				for (int j = 0; j < length - i - 1; j++) 
 				{
-					if (array[j].compareTo(array[j + 1]) == -1) 
+					if ( ( ( Comparable<T> ) array[j] ).compareTo((T) array[j + 1]) == -1) 
 					{
-						Comparable temp = array[j];
+						Comparable<T> temp = array[j];
 						array[j] = array[j + 1];
 						array[j + 1] = temp;
 					}
 				}
 			}
 		}
-
+		
+		
 		else 
 		{
 			for (int i = 0; i < length - 1; i++) 
 			{
 				for (int j = 0; j < length - i - 1; j++) 
 				{
-					if (((Shape) array[j]).compare((Shape) array[j + 1], compareType) == -1) 
+					if (comp.compare((T) array[j], (T) array[j + 1]) == -1) 
 					{
-						Comparable temp = array[j];
+						Comparable<T> temp = array[j];
 						array[j] = array[j + 1];
 						array[j + 1] = temp;
 					}
@@ -43,4 +46,5 @@ public class BubbleSort
 			}
 		}
 	}
+
 }

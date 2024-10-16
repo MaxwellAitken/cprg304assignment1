@@ -2,6 +2,7 @@ package appDomain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import sortingAlgorithms.BubbleSort;
@@ -13,6 +14,8 @@ import shapes.Pyramid;
 import shapes.Shape;
 import shapes.SquarePrism;
 import shapes.TriangularPrism;
+import shapes.VolumeCompare;
+import shapes.BaseAreaCompare;
 
 
 public class AppDriver
@@ -100,29 +103,36 @@ public class AppDriver
 			}
 		}
 		
+
+		Comparator<Shape> comp = null;
+		
+		if (compareType.equals("v")) 
+		{
+			comp = new VolumeCompare();
+		}
+		
+		else if (compareType.equals("a")) 
+		{
+			comp = new BaseAreaCompare();
+		}
 		
 
-		long start, stop;
-		start = System.nanoTime();
-		
+//		Bubble Sort TEST 2
 		if (sortType.equals("b")) 
 		{
-//			Bubble Sort by height TEST
-			BubbleSort bs = new BubbleSort();
-			bs.bubbleSort(shapes, compareType);
-			
+			long start, stop;
+//			Start benchmarking test
+			start = System.nanoTime();
 
-			System.out.println( "First element is: " + shapes[0].toString(compareType)  );
-			for( int i = 999; i < shapes.length - 1; i += 1000 )
-			{
-				System.out.println( (i + 1) + "-th element is: " + shapes[i].toString(compareType) );
-			}
+//			perform the bubble sort, passing the shape array and the compare type
+			BubbleSort.bubbleSort2(shapes, comp);
 			
-			System.out.println( "Last element is: " + shapes[shapes.length - 1].toString(compareType)  );
+//			Stop benchmarking test
+			stop = System.nanoTime();
+			new AppDriver().displayResults( shapes );
+			System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
 		}
 
-		stop = System.nanoTime();
-		System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
 		
 		
 		// refer to demo01 Test.java for an example on how to parse command
@@ -174,7 +184,22 @@ public class AppDriver
 				this.shapeFile = arg.substring(2, arg.length()).replaceAll("\"", "").toLowerCase();
 			}
 		}
-
+	}
+	
+	private void displayResults(Shape[] array) 
+	{
+		
+//		Display the first element of the sorted array
+		System.out.println( "First element is: " + array[0].toString(compareType)  );
+		
+//		Display every thousandth element of the array
+		for( int i = 999; i < array.length - 1; i += 1000 )
+		{
+			System.out.println( (i + 1) + "-th element is: " + array[i].toString(compareType) );
+		}
+		
+//		Display the last element of the array
+		System.out.println( "Last element is: " + array[array.length - 1].toString(compareType)  );
 	}
 	
 }
