@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 import sortingAlgorithms.BubbleSort;
+import sortingAlgorithms.InsertionSort;
 import shapes.Cone;
 import shapes.Cylinder;
 import shapes.OctagonalPrism;
@@ -115,7 +116,7 @@ public class AppDriver
 		{
 			comp = new BaseAreaCompare();
 		}
-		
+
 
 //		Bubble Sort TEST 2
 		if (sortType.equals("b")) 
@@ -125,7 +126,24 @@ public class AppDriver
 			start = System.nanoTime();
 
 //			perform the bubble sort, passing the shape array and the compare type
-			BubbleSort.bubbleSort2(shapes, comp);
+			BubbleSort.bubbleSort(shapes, comp);
+			
+//			Stop benchmarking test
+			stop = System.nanoTime();
+			new AppDriver().displayResults( shapes );
+			System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
+		}
+
+
+//		Bubble Sort TEST 2
+		else if (sortType.equals("i")) 
+		{
+			long start, stop;
+//			Start benchmarking test
+			start = System.nanoTime();
+
+//			perform the bubble sort, passing the shape array and the compare type
+			InsertionSort.insertionSort(shapes, comp);
 			
 //			Stop benchmarking test
 			stop = System.nanoTime();

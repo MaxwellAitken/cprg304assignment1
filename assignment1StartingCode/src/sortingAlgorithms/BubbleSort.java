@@ -8,7 +8,7 @@ public class BubbleSort
 {
 
 	@SuppressWarnings("unchecked")
-	public static <T> void bubbleSort2( Comparable<T>[] array, Comparator<? super T> comp )
+	public static <T> void bubbleSort( Comparable<T>[] array, Comparator<? super T> comp )
 	{
 		int length = array.length;
 		
