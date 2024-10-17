@@ -21,7 +21,6 @@ public abstract class Shape implements Comparable<Shape>
 	public abstract double calcBaseArea();
 	
 	
-//	Comparing two shapes by height
 	@Override
 	public int compareTo(Shape s) 
 	{

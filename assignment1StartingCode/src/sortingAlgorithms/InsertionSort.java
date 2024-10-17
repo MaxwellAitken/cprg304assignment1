@@ -2,13 +2,13 @@ package sortingAlgorithms;
 
 import java.util.Comparator;
 
-
 public class InsertionSort 
 {
 
 	@SuppressWarnings("unchecked")
 	public static <T> void insertionSort( Comparable<T>[] array, Comparator<? super T> comp )
 	{
+		
 	    int length = array.length;
 	    
 	    

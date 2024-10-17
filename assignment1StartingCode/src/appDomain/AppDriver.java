@@ -7,6 +7,9 @@ import java.util.Scanner;
 
 import sortingAlgorithms.BubbleSort;
 import sortingAlgorithms.InsertionSort;
+import sortingAlgorithms.MergeSort;
+import sortingAlgorithms.QuickSort;
+import sortingAlgorithms.SelectionSort;
 import shapes.Cone;
 import shapes.Cylinder;
 import shapes.OctagonalPrism;
@@ -118,39 +121,54 @@ public class AppDriver
 		}
 
 
-//		Bubble Sort TEST 2
+
+//		Start benchmarking test
+		long start, stop;
+		start = System.nanoTime();
+		
+		
+//		Bubble Sort TEST 
 		if (sortType.equals("b")) 
 		{
-			long start, stop;
-//			Start benchmarking test
-			start = System.nanoTime();
-
 //			perform the bubble sort, passing the shape array and the compare type
 			BubbleSort.bubbleSort(shapes, comp);
-			
-//			Stop benchmarking test
-			stop = System.nanoTime();
-			new AppDriver().displayResults( shapes );
-			System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
 		}
 
 
-//		Bubble Sort TEST 2
+//		Insertion Sort TEST 
 		else if (sortType.equals("i")) 
 		{
-			long start, stop;
-//			Start benchmarking test
-			start = System.nanoTime();
-
-//			perform the bubble sort, passing the shape array and the compare type
 			InsertionSort.insertionSort(shapes, comp);
-			
-//			Stop benchmarking test
-			stop = System.nanoTime();
-			new AppDriver().displayResults( shapes );
-			System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
 		}
 
+
+//		Selection Sort TEST 
+		else if (sortType.equals("s")) 
+		{
+			SelectionSort.selectionSort(shapes, comp);
+		}
+
+
+//		Merge Sort TEST 
+		else if (sortType.equals("m")) 
+		{
+			MergeSort.mergeSort(shapes, comp);
+		}
+
+
+//		Quick Sort TEST 
+		else if (sortType.equals("q")) 
+		{
+			QuickSort.quickSort(shapes, comp);
+		}
+
+		
+
+//		Stop benchmarking test
+		stop = System.nanoTime();
+		new AppDriver().displayResults( shapes );
+		System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
+		
 		
 		
 		// refer to demo01 Test.java for an example on how to parse command
