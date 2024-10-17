@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 import sortingAlgorithms.BubbleSort;
+import sortingAlgorithms.HeapSort;
 import sortingAlgorithms.InsertionSort;
 import sortingAlgorithms.MergeSort;
 import sortingAlgorithms.QuickSort;
@@ -160,6 +161,13 @@ public class AppDriver
 		else if (sortType.equals("q")) 
 		{
 			QuickSort.quickSort(shapes, comp);
+		}
+
+
+//		Heap Sort TEST 
+		else if (sortType.equals("z")) 
+		{
+			HeapSort.heapSort(shapes, comp);
 		}
 
 		
