@@ -288,8 +288,9 @@ public class AppDriver
 	private <T> void displaySortedArray(Comparable<T>[] array) 
 	{
 		System.out.println( "First element is: " + ( (Shape) array[0]).toString(compareType) );
-		
-		for( int i = 999; i < array.length - 1; i += 1000 )
+
+		//for( int i = 999; i < array.length - 1; i += 1000 )
+		for( int i = 0; i < array.length; i ++ ) //This fixes the other elements not showing properly and shows the rest of them
 		{
 			System.out.println( (i + 1) + "-th element is: " + ( (Shape) array[i]).toString(compareType) );
 		}
