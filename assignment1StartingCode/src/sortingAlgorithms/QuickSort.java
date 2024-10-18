@@ -7,7 +7,15 @@ public class QuickSort
 
 	private static Comparator compareType;
 
-	
+
+	public static <T> void quickSort( Comparable<T>[] array )
+	{
+		compareType = null;
+		int length = array.length;
+		int f = 0;
+        sort( array, f, length - 1 );
+	}
+
 	public static <T> void quickSort( Comparable<T>[] array, Comparator<? super T> comp )
 	{
 		compareType = comp;
@@ -41,7 +49,7 @@ public class QuickSort
 		{
 			for (int j = low; j <= high - 1; j++) 
 			{
-				if ( ( (Comparable<T>) array[j] ).compareTo( (T) pivot )  > 0 ) 
+				if ( array[j].compareTo( (T) pivot )  > 0 ) 
 				{
 					i++;
 					swap(array, i, j);

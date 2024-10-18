@@ -1,3 +1,15 @@
+/*********************************************************
+** Program Name:                              Shape Sorter
+** Author:                                  Maxwell Aitken
+** Created:                             September 18, 2024
+** Description:       
+**		Sorts shapes using a one of multiple sorting algorithms. 
+**		Compares shapes using compareTo for height and
+**		compare for base area and volume
+*
+**	***Comments inside of code refer to line(s) below the comment.***
+*********************************************************/
+
 package appDomain;
 
 import java.io.BufferedReader;
@@ -11,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+
 import shapes.Shape;
 
 
@@ -37,116 +50,59 @@ public class AppDriver
 	@SuppressWarnings("unchecked")
 	public static void main( String[] args )
 	{
-
+		/*
+		*   These maps will be used in the sortShapes method to invoke
+		*   a sorting method using reflection.
+		*/
 		sortMap = new HashMap<>();
 		sortMap.put("b", "BubbleSort");
 		sortMap.put("i", "InsertionSort");
 		sortMap.put("s", "SelectionSort");
 		sortMap.put("m", "MergeSort");
 		sortMap.put("q", "QuickSort");
-		sortMap.put("z", "HashSort");
+		sortMap.put("z", "HeapSort");
 
 		compMap = new HashMap<>();
 		compMap.put("h", null);
 		compMap.put("v", "VolumeCompare");
 		compMap.put("a", "BaseAreaCompare");
 
-		new AppDriver().parseArgs( args );
 		
-		
-		if (compareType != null && sortType != null && fileReader != null) 
+//		If command line args were correctly inputed
+		if (new AppDriver().parseArgs( args )) 
 		{
 //			Calls method to fill an array with shapes from data file.
 			new AppDriver().fillShapeArray();
 			
 			new AppDriver().sortShapes(shapeArray);
 		}
-		
-
-		
-//		The compare type will be null when comparing shapes by height.
-//		This will tell each sorting algorithm to use the compareTo method.
-//		Comparator<?> comp = null;
-//		if (compareType.equals("v")) 
-//		{
-//			comp = new VolumeCompare();
-//		}
-//		else if (compareType.equals("a")) 
-//		{
-//			comp = new BaseAreaCompare();
-//		}
-////		Start benchmarking test
-//		long start, stop;
-//		start = System.nanoTime();
-//		if (sortType.equals("b")) 
-//		{
-//			BubbleSort.bubbleSort(shapeArray, comp);
-//		}
-//		else if (sortType.equals("i")) 
-//		{
-//			InsertionSort.insertionSort(shapeArray, comp);
-//		}
-//		else if (sortType.equals("s")) 
-//		{
-//			SelectionSort.selectionSort(shapeArray, comp);
-//		}
-//		else if (sortType.equals("m")) 
-//		{
-//			MergeSort.mergeSort(shapeArray, comp);
-//		}
-//		else if (sortType.equals("q")) 
-//		{
-//			QuickSort.quickSort(shapeArray, comp);
-//		}
-//		else if (sortType.equals("z")) 
-//		{
-//			HeapSort.heapSort(shapeArray, comp);
-//		}
-////		Stop benchmarking test
-//		stop = System.nanoTime();
-//		new AppDriver().displaySortedArray( shapeArray );
-//		System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
-		
-		
-		
-		// refer to demo01 Test.java for an example on how to parse command
-		// line arguments and benchmarking tests
-
-		// refer to demo02 Student.java for comparable implementation, and
-		// NameCompare.java or GradeCompare for comparator implementations
-
-		// refer to demo02 KittySort.java on how to use a custom sorting
-		// algorithm on a list of comparables to sort using either the
-		// natural order (comparable) or other orders (comparators)
-
-		// refer to demo03 OfficeManager.java on how to create specific
-		// objects using reflection from a String
 	}
 
 	
-	private void parseArgs( String[] args )
+	private Boolean parseArgs( String[] args )
 	{
-		System.out.println("Testing command line args...\n");
-		
-		for ( String arg : args ) 
+		System.out.println("\nTesting command line args...\n");
+
+		for (String arg : args)
 		{
-			String identifier = arg.substring(0, 2);
-//			Each if statement has two options because there are two types of valid dashes. 
-//			These are not the same: – -  
-			if ( identifier.equalsIgnoreCase("-t") || identifier.equalsIgnoreCase("–t") )
+//							 –   -
+			arg = arg.replace("–", "-").toLowerCase();
+			
+			String argId = arg.substring(0, 2);
+			
+			if ( argId.equals("-t") )
 			{
 				this.compareType = arg.substring(2, arg.length()).toLowerCase();
+				
 			}
-			
-			else if ( identifier.equalsIgnoreCase("-s") || identifier.equalsIgnoreCase("–s") ) 
+
+			if ( argId.equals("-s") )
 			{
 				this.sortType = arg.substring(2, arg.length()).toLowerCase();
 			}
-			
-			else if ( identifier.equalsIgnoreCase("-f") || identifier.equalsIgnoreCase("–f") ) 
+
+			if ( argId.equals("-f") )
 			{
-//				Make the file path lower case and remove any quotations
-//				in case the user inputed it incorrectly.
 				filePath = arg.substring(2, arg.length()).replaceAll("\"", "").toLowerCase();
 
 				try
@@ -157,56 +113,49 @@ public class AppDriver
 				{
 					try 
 					{
-//						Tries finding the file by taking only the "shapesX.txt" part of the string
-//						and adding res\ to the start. The result should be: "res\shapesX.txt"
-						int f = filePath.indexOf("shapes");
-						fileReader = new FileReader( "res\\" + filePath.substring(f, f + 11) );
+						filePath += ".txt";
+						fileReader = new FileReader( filePath );
 					} 
 					catch ( FileNotFoundException e1 ) 
 					{ 
-						System.out.println("Error: invalid file path"); 
-						System.out.println("There was no file found at the specified location."); 
+						System.out.println( "Error: invalid file path \"" + filePath + "\"" ); 
+						System.out.println( "There was no file found at the specified location." ); 
+						System.out.println( "Please enter the file path as follows:");
+						System.out.println( "   -f\"{filename.extension}\"\n\n" );
+						return false;
 					}
 				}
 			}
 		}
+		
+		if ( compareType == null || !compMap.containsKey(compareType) ) 
+		{
+			System.out.println( "Error: invalid compare type \"" + compareType + "\"" );
+			System.out.println( "Please enter the compare type as follows:");
+			System.out.println( "   -t{c}  where c is one of: " + compMap.keySet() + "\n\n" );
+			return false;
+		}
 
-		assignArgs();
-	}
-	
-	private void assignArgs() 
-	{
-		Boolean invalidComp = true;
-		if (compMap.containsKey(compareType)) invalidComp = false;
-		
-		Boolean invalidSort = true;
-		if (sortMap.containsKey(sortType)) invalidSort = false;
-		
-		
-		if (compareType == null || invalidComp) 
+		else if ( sortType == null || !sortMap.containsKey(sortType) ) 
 		{
-			System.out.println("Error: invalid compare type");
-			System.out.println("Please enter the compare type as follows:");
-			System.out.println("   -t{c}  where c is one of:" + compMap.keySet() + "\n\n");
+			System.out.println( "Error: invalid sort type \"" + sortType + "\"" );
+			System.out.println( "Please enter the sort type as follows:" );
+			System.out.println( "   -s{x}  where x is one of: " + sortMap.keySet() + "\n\n" );
+			return false;
 		}
 		
-		else if (sortType == null || invalidSort) 
-		{
-			System.out.println("Error: invalid sort type");
-			System.out.println("Please enter the sort type as follows:\n");
-			System.out.println("   -t{s}  where s is one of:" + sortMap.keySet() + "\n\n");
-		}
-		
-		else if (fileReader == null) ;
-		
+		else if ( fileReader == null ) return false;
+
 		else  
 		{
-			System.out.println("Testing successful.\n");
-			System.out.println("Shapes from the file: \"" + filePath + "\"");
-			System.out.println("will be sorted using " + sortMap.get(sortType));
-			System.out.println("and compared using " + compMap.get(compareType) + ".\n\n");
+			System.out.println( "Testing successful.\n\n\n" );
+			System.out.println( "Shapes from the file:\t\"" + filePath + "\"" );
+			System.out.println( "\nWill be sorted using:\t" + sortMap.get(sortType).replace("Sort", " Sort") );
+			System.out.println( "\nAnd compared using:\t" + ( compareType.equals("h") ? "height" : compMap.get(compareType).replace("Compare", "") )  + "\n\n" );
+			return true;
 		}
 	}
+	
 	
 	
 	private void fillShapeArray() 
@@ -219,40 +168,29 @@ public class AppDriver
 			*  Read the first line which gives the number of shapes in the 
 			*  file and initialize the array with that length. 
 			*/
-			String line = buff.readLine();
-	
-			shapeArray = new Comparable[Integer.valueOf(line)];
+			shapeArray = new Comparable[Integer.valueOf( buff.readLine() )];
 			
-			line = buff.readLine();
+			String line = buff.readLine();
 			int i = 0;
 			
 			while(line != null)
 			{
-				Comparable o = null;
 				StringTokenizer st = new StringTokenizer(line," ");
 			
 //				The first token of the line is the class name
-				String className = "shapes."+st.nextToken();
-				Class cls = Class.forName(className);
+				Class cls = Class.forName( "shapes."+st.nextToken() );
 				
 				/*  
 				*  The next two tokens in the line correspond to the height 
 				*  and another parameter of the shape. Because all shape 
 				*  types in this program have two parameters that are doubles, 
-				*  we can use  this code sequence for all shapes. 
+				*  we can use this code sequence for all shapes. 
 				*/
-				Class paramTypes[] = new Class[2];
-				paramTypes[0] = Double.TYPE;
-				paramTypes[1] = Double.TYPE;
+				Constructor ct = cls.getConstructor( Double.TYPE, Double.TYPE );
 				
-				Constructor ct = cls.getConstructor(paramTypes);
+				Object argList[] = new Object[] { Double.valueOf(st.nextToken()), Double.valueOf(st.nextToken()) };
 				
-				Object argList[] = new Object[2];
-				argList[0] = Double.valueOf(st.nextToken());
-				argList[1] = Double.valueOf(st.nextToken());
-				
-				o = (Comparable) ct.newInstance(argList);
-				shapeArray[i] = o;
+				shapeArray[i] = (Comparable) ct.newInstance(argList);
 				
 				i++;
 				line = buff.readLine();
@@ -277,44 +215,63 @@ public class AppDriver
 
 		try 
 		{
-			
-			Object sort = null;
-
+			/*
+			*   Get the name of the sorting class (BubbleSort, InsertionSort, etc.)
+			*   and create a class object to reference the sorting class.
+			*   Get the name of the main method from that class.
+			*/
 			String sortClassName = "sortingAlgorithms." + sortMap.get(sortType);
+			Class sortClass = Class.forName( sortClassName );
+
+			String sortMethodName = sortClassName.toLowerCase().charAt(18) + sortClassName.substring(19);
+			Method sortMethod;
+			Object sortMethodParams[] = new Object[] {shapeArray};
 			
-			Class sortClass = Class.forName(sortClassName);
-
-			Method sortMethod = sortClass.getMethod( (sortType + sortClassName.substring(19) ), Comparable[].class, Comparator.class);
-
-
-			Object comp = null;
 			
-			if (!compareType.equals("h")) 
+			/*
+			*   ***Comparing by height***
+			*   Define the sorting method using its name and parameter types.
+			*   We will pass the array of shapes as the only parameter 
+			*   into the sorting method.
+			*/
+			if (compareType.equals("h")) 
+			{
+				sortMethod = sortClass.getMethod( ( sortMethodName ), Comparable[].class);
+			}
+
+			
+			/*
+			*   ***Comparing by base area or volume***
+			*   Get the name of the compare class (BaseAreaCompare or VolumeCompare)
+			*   and create a new instance of that class.
+			*   We will pass the array of shapes and an instance of the compare class
+			*   into the sorting method.
+			*/
+			else 
 			{
 				String compClassName = "shapes." + compMap.get(compareType);
-				
-				Class compClass = Class.forName(compClassName);
-				
-				comp = compClass.getConstructor(null).newInstance(null);
+				Object comp = Class.forName(compClassName).getConstructor().newInstance();
+				sortMethodParams = new Object[] {shapeArray, comp};
+				sortMethod = sortClass.getMethod( ( sortMethodName ), Comparable[].class, Comparator.class);
 			}
-			
-			
-			
 
+
+			System.out.println("\nNow sorting...\n");
 
 //			Start benchmarking test
 			long start, stop;
 			start = System.nanoTime();
 
-//			Invoke the sorting method
-			sortMethod.invoke(sort, shapeArray, comp);
-			
+//			Invoke the sorting method passing the parameters we set earlier
+			sortMethod.invoke(null, sortMethodParams);
 			
 //			Stop benchmarking test
 			stop = System.nanoTime();
+//			Display the results after sorting
+			System.out.println("...sorting complete!\n\n\n");
 			displaySortedArray( shapeArray );
-			System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)");
-			
+//			Display the benchmark results
+			System.out.println( "\n" + sortType + " run time was: " + (( stop - start ) / 1000000) + " millisecond(s)\n");
 		}
 		
 		catch (ClassNotFoundException e) { e.printStackTrace(); }
@@ -322,7 +279,8 @@ public class AppDriver
 		catch (IllegalArgumentException e) { e.printStackTrace(); }
 		catch (InstantiationException e) { e.printStackTrace(); }
 		catch (IllegalAccessException e) { e.printStackTrace(); }
-		catch (InvocationTargetException e) { e.printStackTrace(); }
+		catch (InvocationTargetException e) { e.printStackTrace(); } 
+		catch (SecurityException e) { e.printStackTrace(); }
 	}
 
 	

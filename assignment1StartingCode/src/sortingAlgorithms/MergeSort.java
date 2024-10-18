@@ -7,7 +7,15 @@ public class MergeSort
 
 	private static Comparator compareType;
 
-	
+
+	public static <T> void mergeSort( Comparable<T>[] array)
+	{
+		compareType = null;
+		int length = array.length;
+		int f = 0;
+        sort( array, f, length - 1 );
+	}
+
 	public static <T> void mergeSort( Comparable<T>[] array, Comparator<? super T> comp )
 	{
 		compareType = comp;
@@ -70,7 +78,7 @@ public class MergeSort
 		{
 	        while (i < a1 && j < a2) 
 	        {
-	            if ( ( (Comparable<T>) L[i] ).compareTo( (T) R[j] )  >= 0 ) 
+	            if ( L[i].compareTo( (T) R[j] )  >= 0 )
 	            {
 	                array[k] = L[i];
 	                i++;
@@ -102,8 +110,6 @@ public class MergeSort
 	        }
 		}
         
-        
-        // Copy the remaining L elements to sorted array
         while (i < a1) 
         {
             array[k] = L[i];
@@ -111,7 +117,6 @@ public class MergeSort
             k++;
         }
 
-        // Copy the remaining R elements to sorted array
         while (j < a2) 
         {
             array[k] = R[j];

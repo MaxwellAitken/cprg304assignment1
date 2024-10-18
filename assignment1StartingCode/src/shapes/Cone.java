@@ -33,7 +33,7 @@ public class Cone extends Shape
 	public double calcBaseArea() 
 	{
 		
-//		A = 𝝅r²
+//		A = pir²
 		return Math.PI * Math.pow(this.getRadius(), 2);
 	}
 
